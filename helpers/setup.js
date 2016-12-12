@@ -1,15 +1,42 @@
-var wd = require("wd");
+'use strict';
 
-require('colors');
-var chai = require("chai");
-var chaiAsPromised = require("chai-as-promised");
-chai.use(chaiAsPromised);
-var should = chai.should();
-chaiAsPromised.transferPromiseness = wd.transferPromiseness;
+class Setup {
+	constructor() {
+		const
+			this.wd = require('wd'),
+			this.chai = require('chai'),
+			this.chaiAsPromised = require('chai-as-promised'),
+			this.colors = require('colors');
 
-if (process.env.npm_package_config_sauce) {
-  process.env.SAUCE_USERNAME = process.env.npm_package_config_sauce_username;
-  process.env.SAUCE_ACCESS_KEY = process.env.npm_package_config_sauce_access_key;
+		// enabling chai assertion style: https://www.npmjs.com/package/chai-as-promised#node
+		this.chai.use(this.chaiAsPromised);
+		this.chai.should();
+		// enables chai assertion chaining
+		this.chaiAsPromised.transferPromiseness = this.wd.transferPromiseness;
+	}
+
+	// configures web driver output logging
+	function wdLogging(driver) {
+		// See whats going on
+		driver.on('status', info => {
+			console.log(this.colors.cyan(info));
+		});
+		driver.on('command', (meth, path, data) => {
+			console.log(` > ${this.colors.yellow(meth)}`);
+			console.log(this.colors.grey(path));
+			console.log(data || '');
+		});
+		driver.on('http', (meth, path, data) => {
+			console.log(` > ${this.colors.magenta(meth)}`);
+			console.log(path);
+			console.log(this.colors.grey(data || ''));
+		});
+	}
+
+	// returns web driver module
+	function getWd() {
+		return this.wd;
+	}
 }
 
-exports.should = should;
+module.exports = Setup;
