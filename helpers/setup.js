@@ -14,27 +14,25 @@ class Setup {
 		this.chaiAsPromised.transferPromiseness = this.wd.transferPromiseness;
 	}
 
-	// configures web driver output logging
-	wdLogging(driver) {
+	// returns web driver module
+	getWd() {
+		return this.wd;
+	}
+
+	// configures driver output logging
+	logging(driver) {
 		// See whats going on
 		driver.on('status', info => {
 			console.log(this.colors.cyan(info));
 		});
 		driver.on('command', (meth, path, data) => {
-			console.log(` > ${this.colors.yellow(meth)}`);
-			console.log(this.colors.grey(path));
-			console.log(data || '');
+			console.log(` > ${this.colors.yellow(meth)} ${this.colors.grey(path)} ${data || ''}`);
+			// console.log(' > ' + this.colors.yellow(meth), this.colors.grey(path), data || '');
 		});
 		driver.on('http', (meth, path, data) => {
-			console.log(` > ${this.colors.magenta(meth)}`);
-			console.log(path);
-			console.log(this.colors.grey(data || ''));
+			console.log(` > ${this.colors.magenta(meth)} ${path} ${this.colors.grey(data || '')}`);
+			// console.log(' > ' + this.colors.magenta(meth), path, this.colors.grey(data || ''));
 		});
-	}
-
-	// returns web driver module
-	getWd() {
-		return this.wd;
 	}
 }
 
