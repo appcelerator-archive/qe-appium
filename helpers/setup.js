@@ -2,11 +2,10 @@
 
 class Setup {
 	constructor() {
-		const
-			this.wd = require('wd'),
-			this.chai = require('chai'),
-			this.chaiAsPromised = require('chai-as-promised'),
-			this.colors = require('colors');
+		this.wd = require('wd');
+		this.chai = require('chai');
+		this.chaiAsPromised = require('chai-as-promised');
+		this.colors = require('colors');
 
 		// enabling chai assertion style: https://www.npmjs.com/package/chai-as-promised#node
 		this.chai.use(this.chaiAsPromised);
@@ -16,7 +15,7 @@ class Setup {
 	}
 
 	// configures web driver output logging
-	function wdLogging(driver) {
+	wdLogging(driver) {
 		// See whats going on
 		driver.on('status', info => {
 			console.log(this.colors.cyan(info));
@@ -34,7 +33,7 @@ class Setup {
 	}
 
 	// returns web driver module
-	function getWd() {
+	getWd() {
 		return this.wd;
 	}
 }
