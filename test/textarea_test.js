@@ -2,8 +2,8 @@
 
 const Setup = require('../helpers/setup.js');
 
-// Controls > Slider > Basic
-describe('KS Slider on Android', function () {
+// Controls > Text Area > Basic
+describe('KS Text Area on Android', function () {
 	before('', function () {
 
 	});
@@ -17,7 +17,7 @@ describe('KS Slider on Android', function () {
 	});
 });
 
-describe('KS Slider on iOS', function () {
+describe('KS Text Area on iOS', function () {
 	before('', function () {
 
 	});
