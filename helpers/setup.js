@@ -19,7 +19,7 @@ class Setup {
 		return this.wd;
 	}
 
-	// configures driver output logging
+	// prints out driver logging
 	logging(driver) {
 		// See whats going on
 		driver.on('status', info => {
@@ -27,11 +27,9 @@ class Setup {
 		});
 		driver.on('command', (meth, path, data) => {
 			console.log(` > ${this.colors.yellow(meth)} ${this.colors.grey(path)} ${data || ''}`);
-			// console.log(' > ' + this.colors.yellow(meth), this.colors.grey(path), data || '');
 		});
 		driver.on('http', (meth, path, data) => {
 			console.log(` > ${this.colors.magenta(meth)} ${path} ${this.colors.grey(data || '')}`);
-			// console.log(' > ' + this.colors.magenta(meth), path, this.colors.grey(data || ''));
 		});
 	}
 }

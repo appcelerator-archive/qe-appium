@@ -4,14 +4,21 @@ const Setup = require('../helpers/setup.js');
 
 // Controls > Slider > Basic
 describe('KS Slider on iOS', function () {
+	// the webdriver takes a while to setup; mocha timeout is set to 5 minutes
 	this.timeout(300000);
 
-	let driver = null;
+	let
+		driver = null,
+		asserters = null,
+		webdriver = null;
 
-	before('setup', function () {
-		const
-			setup = new Setup(),
-			webdriver = setup.getWd();
+	before('suite setup', function () {
+		const setup = new Setup();
+
+		webdriver = setup.getWd();
+
+		// used when waiting for elements: https://github.com/admc/wd/#waiting-for-something
+		asserters = webdriver.asserters;
 
 		// appium local server
 		driver = webdriver.promiseChainRemote({
@@ -19,7 +26,7 @@ describe('KS Slider on iOS', function () {
 			port: 4723
 		});
 
-		// setups console output for the driver
+		// turn on logging for the driver
 		setup.logging(driver);
 
 		// specify target test app and ios simulator
@@ -28,27 +35,42 @@ describe('KS Slider on iOS', function () {
 			platformName: 'iOS',
 			deviceName: 'iPhone 7 Plus',
 			platformVersion: '10.2',
-			app: '/Users/wluu/sandbox/monkeycheck/build/iphone/build/Products/Debug-iphonesimulator/monkeycheck.app'
+			app: '/Users/wluu/github/qe-appium/KitchenSink/build/iphone/build/Products/Debug-iphonesimulator/KitchenSink.app',
+			noReset: true // doesn't kill the simulator
 		});
 	});
 
-	after('teardown', function () {
+	after('suite teardown', function () {
 		return driver.quit();
 	});
 
-	it('do something', function () {
+	it('should change basic slider', function () {
 		return driver
-			.elementByName('Hello, World')
+			.elementByName('Slider')
 			.click()
-			.waitForElementByName('Alert')
-			.elementByName('OK')
+			.waitForElementByName('Basic', asserters.isDisplayed)
 			.click()
-			.sleep(500);
+			.waitForElementByName('Change Basic Slider', asserters.isDisplayed)
+			.click()
+			.waitForElementByName('Basic Slider - value = 2 act val 2', asserters.isDisplayed);
+	});
+
+	it('drag the scrubber on the slider to the right', function () {
+		// https://github.com/admc/wd/blob/master/test/specs/mjson-actions-specs.js
+
+		const dragToRight = new webdriver.TouchAction()
+			.press({x:139, y:108}) // press on the scrubber location
+			.moveTo({x:100, y:0}) // drag scrubber to the right
+			.release(); // release the scrubber
+
+		return driver
+			.performTouchAction(dragToRight)
+			.waitForElementByName('Basic Slider - value = 6 act val 6', asserters.isDisplayed);
 	});
 });
 
 describe('KS Slider on Android', function () {
-	before('setup', function () {
+	before('suite setup', function () {
 		// let desired = {
 		// 	automationName: 'Appium',
 		// 	platformName: 'Android',
@@ -60,7 +82,7 @@ describe('KS Slider on Android', function () {
 		// };
 	});
 
-	after('teardown', function () {
+	after('suite teardown', function () {
 
 	});
 
