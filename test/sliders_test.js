@@ -70,20 +70,46 @@ describe('KS Slider on iOS', function () {
 });
 
 describe('KS Slider on Android', function () {
+	// the webdriver takes a while to setup; mocha timeout is set to 5 minutes
+	this.timeout(300000);
+
+	let
+		driver = null,
+		asserters = null,
+		webdriver = null;
+
 	before('suite setup', function () {
-		// let desired = {
-		// 	automationName: 'Appium',
-		// 	platformName: 'Android',
-		// 	platformVersion: '6.0',
-		// 	deviceName: '192.168.56.101:5555',
-		// 	app: '/Users/wluu/sandbox/monkeycheck2/build/android/bin/monkeycheck2.apk',
-		// 	appPackage: 'com.appc.monkeycheck2',
-		// 	appActivity: '.Monkeycheck2Activity'
-		// };
+		const setup = new Setup();
+
+		webdriver = setup.getWd();
+
+		// used when waiting for elements: https://github.com/admc/wd/#waiting-for-something
+		asserters = webdriver.asserters;
+
+		// appium local server
+		driver = webdriver.promiseChainRemote({
+			host: 'localhost',
+			port: 4723
+		});
+
+		// turn on logging for the driver
+		setup.logging(driver);
+
+		// specify target test app and ios simulator
+		return driver.init({
+			automationName: 'Appium',
+			platformName: 'Android',
+			platformVersion: '6.0',
+			deviceName: '192.168.56.101:5555',
+			app: '/Users/wluu/github/qe-appium/KitchenSink/build/android/bin/KitchenSink.apk',
+			appPackage: 'com.appcelerator.kitchensink',
+			appActivity: '.KitchensinkActivity',
+			noReset: true // doesn't kill the simulator
+		});
 	});
 
 	after('suite teardown', function () {
-
+		return driver.quit();
 	});
 
 	it.skip('do something there', function () {
