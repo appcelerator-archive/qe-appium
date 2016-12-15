@@ -43,7 +43,7 @@ after('suite teardown', function () {
 });
 
 // Controls > Slider > Basic
-describe('KS Slider', function () {
+describe('KS iOS Slider', function () {
 	// in general, the tests take a while to go through, which will hit mocha's 2 second timeout threshold.
 	// set timeout to 5 minutes
 	this.timeout(300000);
@@ -59,7 +59,7 @@ describe('KS Slider', function () {
 			.waitForElementByName('Basic Slider - value = 2 act val 2', asserters.isDisplayed);
 	});
 
-	it('drag the scrubber on the slider to the right', function () {
+	it('should drag the scrubber on the slider to the right', function () {
 		// https://github.com/admc/wd/blob/master/test/specs/mjson-actions-specs.js
 
 		const dragToRight = new webdriver.TouchAction()
@@ -71,10 +71,18 @@ describe('KS Slider', function () {
 			.performTouchAction(dragToRight)
 			.waitForElementByName('Basic Slider - value = 6 act val 6', asserters.isDisplayed);
 	});
+
+	it('go back to home screen', function () {
+		return driver
+			.elementByName('Slider')
+			.click()
+			.elementByName('Controls')
+			.click();
+	});
 });
 
 // Controls > Label > Basic
-describe('KS Labels', function () {
+describe('KS iOS Labels', function () {
 	this.timeout(300000);
 
 	it.skip('do labels stuff', function () {
@@ -83,7 +91,7 @@ describe('KS Labels', function () {
 });
 
 // Controls > Text Area > Basic
-describe('KS Text Area', function () {
+describe('KS iOS Text Area', function () {
 	this.timeout(300000);
 
 	it.skip('do text area stuff', function () {
@@ -93,7 +101,7 @@ describe('KS Text Area', function () {
 
 
 // Base UI > Views > List View > Built in Templates
-describe('KS List View', function () {
+describe('KS iOS List View', function () {
 	this.timeout(300000);
 
 	it.skip('do list view stuff', function () {
@@ -102,7 +110,7 @@ describe('KS List View', function () {
 });
 
 // Base UI > Views > Image Views > Image File
-describe('KS Image Views', function () {
+describe('KS iOS Image Views', function () {
 	this.timeout(300000);
 
 	it.skip('do image view stuff', function () {

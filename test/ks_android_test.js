@@ -11,33 +11,33 @@ before('suite setup', function () {
 	// the webdriver takes a while to setup; mocha timeout is set to 5 minutes
 	this.timeout(300000);
 
-	const setup = new Setup();
-
-	webdriver = setup.getWd();
-
-	// used when waiting for elements: https://github.com/admc/wd/#waiting-for-something
-	asserters = webdriver.asserters;
-
-	// appium local server
-	driver = webdriver.promiseChainRemote({
-		host: 'localhost',
-		port: 4723
-	});
-
-	// turn on logging for the driver
-	setup.logging(driver);
-
-	// specify target test app and ios simulator
-	return driver.init({
-		automationName: 'Appium',
-		platformName: 'Android',
-		platformVersion: '6.0',
-		deviceName: '192.168.56.101:5555',
-		app: '/Users/wluu/github/qe-appium/KitchenSink/build/android/bin/KitchenSink.apk',
-		appPackage: 'com.appcelerator.kitchensink',
-		appActivity: '.KitchensinkActivity',
-		noReset: true // doesn't kill the simulator
-	});
+	// const setup = new Setup();
+	//
+	// webdriver = setup.getWd();
+	//
+	// // used when waiting for elements: https://github.com/admc/wd/#waiting-for-something
+	// asserters = webdriver.asserters;
+	//
+	// // appium local server
+	// driver = webdriver.promiseChainRemote({
+	// 	host: 'localhost',
+	// 	port: 4723
+	// });
+	//
+	// // turn on logging for the driver
+	// setup.logging(driver);
+	//
+	// // specify target test app and ios simulator
+	// return driver.init({
+	// 	automationName: 'Appium',
+	// 	platformName: 'Android',
+	// 	platformVersion: '6.0',
+	// 	deviceName: '192.168.56.101:5555',
+	// 	app: '/Users/wluu/github/qe-appium/KitchenSink/build/android/bin/KitchenSink.apk',
+	// 	appPackage: 'com.appcelerator.kitchensink',
+	// 	appActivity: '.KitchensinkActivity',
+	// 	noReset: true // doesn't kill the simulator
+	// });
 });
 
 after('suite teardown', function () {
@@ -45,7 +45,7 @@ after('suite teardown', function () {
 });
 
 // Controls > Slider > Basic
-describe('KS Slider', function () {
+describe('KS Android Slider', function () {
 	this.timeout(300000);
 
 	it.skip('do something there', function () {
@@ -62,7 +62,7 @@ describe('KS Slider', function () {
 });
 
 // Controls > Label > Basic
-describe('KS Labels', function () {
+describe('KS Android Labels', function () {
 	this.timeout(300000);
 
 	it.skip('do labels stuff', function () {
@@ -71,7 +71,7 @@ describe('KS Labels', function () {
 });
 
 // Controls > Text Area > Basic
-describe('KS Text Area', function () {
+describe('KS Android Text Area', function () {
 	this.timeout(300000);
 
 	it.skip('do text area stuff', function () {
@@ -80,7 +80,7 @@ describe('KS Text Area', function () {
 });
 
 // Base UI > Views > List View > Built in Templates
-describe('KS List View', function () {
+describe('KS Android List View', function () {
 	this.timeout(300000);
 
 	it.skip('do list view stuff', function () {
@@ -89,7 +89,7 @@ describe('KS List View', function () {
 });
 
 // Base UI > Views > Image Views > Image File
-describe('KS Image Views', function () {
+describe('KS Android Image Views', function () {
 	this.timeout(300000);
 
 	it.skip('do image view stuff', function () {
