@@ -46,18 +46,40 @@ after('suite teardown', function () {
 
 // Controls > Slider > Basic
 describe('KS Android Slider', function () {
+	// in general, the tests take a while to go through, which will hit mocha's 2 second timeout threshold.
+	// set timeout to 5 minutes
 	this.timeout(300000);
 
-	it.skip('do something there', function () {
-		// android
-		// return driver
-		// 	.elementByAndroidUIAutomator('new UiSelector().text("Hello, World");')
-		// 	.click()
-		// 	.sleep(500)
-		// 	.elementByAndroidUIAutomator('new UiSelector().text("Alert");')
-		// 	.elementByAndroidUIAutomator('new UiSelector().text("OK");')
-		// 	.click()
-		// 	.sleep(500);
+	it('should change basic slider', function () {
+		// https://developer.android.com/reference/android/support/test/uiautomator/UiSelector.html
+
+		return driver
+			.elementByAndroidUIAutomator('new UiSelector().text("Slider")')
+			.click()
+			.elementByAndroidUIAutomator('new UiSelector().text("Basic")')
+			.click()
+			.elementByAndroidUIAutomator('new UiSelector().text("Change Basic Slider")')
+			.click();
+	});
+
+	it('should drag the scrubber on the slider to the right', function () {
+		// https://github.com/admc/wd/blob/master/test/specs/mjson-actions-specs.js
+
+		const dragToRight = new webdriver.TouchAction()
+			.press({x:244, y:273}) // press on the scrubber location
+			.moveTo({x:100, y:0}) // drag scrubber to the right
+			.release(); // release the scrubber
+
+		return driver
+			.performTouchAction(dragToRight)
+			.elementByAndroidUIAutomator('new UiSelector().className("android.widget.SeekBar")')
+			.textPresent('Basic Slider - value = 5 act val 5');
+	});
+
+	it('go back to beginning of app', function () {
+		return driver
+			.back()
+			.back();
 	});
 });
 

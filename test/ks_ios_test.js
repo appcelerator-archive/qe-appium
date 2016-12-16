@@ -72,7 +72,7 @@ describe('KS iOS Slider', function () {
 			.waitForElementByName('Basic Slider - value = 6 act val 6', asserters.isDisplayed);
 	});
 
-	it('go back to home screen', function () {
+	it('go back to beginning of app', function () {
 		return driver
 			.elementByName('Slider')
 			.click()
