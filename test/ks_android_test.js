@@ -4,7 +4,6 @@ const Setup = require('../helpers/setup.js');
 
 let
 	driver = null,
-	asserters = null,
 	webdriver = null;
 
 before('suite setup', function () {
@@ -14,9 +13,6 @@ before('suite setup', function () {
 	const setup = new Setup();
 
 	webdriver = setup.getWd();
-
-	// used when waiting for elements: https://github.com/admc/wd/#waiting-for-something
-	asserters = webdriver.asserters;
 
 	// appium local server
 	driver = webdriver.promiseChainRemote({
@@ -65,15 +61,17 @@ describe('KS Android Slider', function () {
 	it('should drag the scrubber on the slider to the right', function () {
 		// https://github.com/admc/wd/blob/master/test/specs/mjson-actions-specs.js
 
-		const dragToRight = new webdriver.TouchAction()
+		const NEW_TEXT = 'Basic Slider - value = 5 act val 5';
+
+		const DRAG_TO_RIGHT = new webdriver.TouchAction()
 			.press({x:244, y:273}) // press on the scrubber location
 			.moveTo({x:100, y:0}) // drag scrubber to the right
 			.release(); // release the scrubber
 
 		return driver
-			.performTouchAction(dragToRight)
-			.elementByAndroidUIAutomator('new UiSelector().className("android.widget.SeekBar")')
-			.textPresent('Basic Slider - value = 5 act val 5');
+			.performTouchAction(DRAG_TO_RIGHT)
+			.elementByAndroidUIAutomator(`new UiSelector().text("${NEW_TEXT}")`)
+			.text().should.become(NEW_TEXT); // this part is redundant; the above command will throw an error if text is not found; left this here as an example
 	});
 
 	it('go back to beginning of app', function () {
@@ -87,8 +85,39 @@ describe('KS Android Slider', function () {
 describe('KS Android Labels', function () {
 	this.timeout(300000);
 
-	it.skip('do labels stuff', function () {
+	it('should check for appcelerator label', function () {
+		const APPC_TEXT = 'Appcelerator';
 
+		return driver
+			.elementByAndroidUIAutomator('new UiSelector().text("Label")')
+			.click()
+			.elementByAndroidUIAutomator('new UiSelector().text("Basic")')
+			.click()
+			.elementByAndroidUIAutomator(`new UiSelector().text("${APPC_TEXT}")`);
+	});
+
+	it('should check for appcelerator label 2', function () {
+		const APPC_TEXT = 'Appcelerator';
+
+		return driver
+			.elementByAndroidUIAutomator('new UiSelector().text("Change Label 2")')
+			.click()
+			.elementByAndroidUIAutomator(`new UiSelector().text("${APPC_TEXT}")`);
+	});
+
+	it('should check for appcelerator label with background', function () {
+		const LOREM_TEXT = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat';
+
+		return driver
+			.elementByAndroidUIAutomator('new UiSelector().text("Label 1 background")')
+			.click()
+			.elementByAndroidUIAutomator(`new UiSelector().text("${LOREM_TEXT}")`);
+	});
+
+	it('go back to beginning of app', function () {
+		return driver
+			.back()
+			.back();
 	});
 });
 
@@ -96,8 +125,59 @@ describe('KS Android Labels', function () {
 describe('KS Android Text Area', function () {
 	this.timeout(300000);
 
-	it.skip('do text area stuff', function () {
+	it('should check text in text area', function () {
+		return driver
+			.elementByAndroidUIAutomator('new UiSelector().text("Text Area")')
+			.click()
+			.elementByAndroidUIAutomator('new UiSelector().text("Basic")')
+			.click()
+			.elementByAndroidUIAutomator('new UiSelector().text("I am a textarea")');
+	});
 
+	// NOTE: the cursor for some reason doesn't stay at the end of the line like ios; so backspacing multiple times delete random words in the text area
+	it.skip('should delete (backspace) default text and enter some text', function () {
+		const BACKSPACES = [
+			webdriver.SPECIAL_KEYS['Back space'], // yes, backspace is spelled incorrectly
+			webdriver.SPECIAL_KEYS['Back space'],
+			webdriver.SPECIAL_KEYS['Back space'],
+			webdriver.SPECIAL_KEYS['Back space'],
+			webdriver.SPECIAL_KEYS['Back space'],
+			webdriver.SPECIAL_KEYS['Back space'],
+			webdriver.SPECIAL_KEYS['Back space'],
+			webdriver.SPECIAL_KEYS['Back space']
+		];
+
+		return driver
+			.elementByClassName('android.widget.EditText')
+			.elementByAndroidUIAutomator('new UiSelector().className("android.widget.EditText")')
+			.click() // brings up the soft keyboard
+			.keys(BACKSPACES) // looks like this method accepts an array ...
+			.keys('monkey') // or a string
+			.elementByAndroidUIAutomator('new UiSelector().text("I am a monkey")');
+	});
+
+	it('should delete (clear text area) text and enter new text', function () {
+		const NEW_TEXT = 'MONKEYLORD WILL RULE THIS WORLD!';
+
+		return driver
+			.elementByClassName('android.widget.EditText')
+			.clear()
+			.click() // brings up the soft keyboard again
+			.keys(NEW_TEXT)
+			.elementByAndroidUIAutomator(`new UiSelector().text("${NEW_TEXT}")`);
+	});
+
+	it('go back to beginning of app', function () {
+		const LOSE_FOCUS = new webdriver.TouchAction()
+			.press({x:390, y:1008}) // need to lose focus from text area first in order to perform the back action; so, tap outside of the text area
+			.release();
+
+		return driver
+			.performTouchAction(LOSE_FOCUS)
+			.back()
+			.back()
+			.back() // need another back action to get back to the beginning of the app; hmmm
+			.sleep(3000);
 	});
 });
 

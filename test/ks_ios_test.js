@@ -99,12 +99,12 @@ describe('KS iOS Labels', function () {
 	});
 
 	it('should check for appcelerator label with background', function () {
-		const loremText = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat';
+		const LOREM_TEXT = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat';
 
 		return driver
 			.elementByName('Label 1 background', webdriver.asserters.isDisplayed)
 			.click()
-			.waitForElementByName(loremText, webdriver.asserters.isDisplayed);
+			.waitForElementByName(LOREM_TEXT, webdriver.asserters.isDisplayed);
 	});
 
 	it('go back to beginning of app', function () {
