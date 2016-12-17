@@ -4,7 +4,6 @@ const Setup = require('../helpers/setup.js');
 
 let
 	driver = null,
-	asserters = null,
 	webdriver = null;
 
 before('suite setup', function () {
@@ -14,9 +13,6 @@ before('suite setup', function () {
 	const setup = new Setup();
 
 	webdriver = setup.getWd();
-
-	// used when waiting for elements: https://github.com/admc/wd/#waiting-for-something
-	asserters = webdriver.asserters;
 
 	// appium local server
 	driver = webdriver.promiseChainRemote({
@@ -52,11 +48,11 @@ describe('KS iOS Slider', function () {
 		return driver
 			.elementByName('Slider')
 			.click()
-			.waitForElementByName('Basic', asserters.isDisplayed)
+			.waitForElementByName('Basic', webdriver.asserters.isDisplayed) // used when waiting for elements: https://github.com/admc/wd/#waiting-for-something
 			.click()
-			.waitForElementByName('Change Basic Slider', asserters.isDisplayed)
+			.waitForElementByName('Change Basic Slider', webdriver.asserters.isDisplayed)
 			.click()
-			.waitForElementByName('Basic Slider - value = 2 act val 2', asserters.isDisplayed);
+			.waitForElementByName('Basic Slider - value = 2 act val 2', webdriver.asserters.isDisplayed);
 	});
 
 	it('should drag the scrubber on the slider to the right', function () {
@@ -69,7 +65,7 @@ describe('KS iOS Slider', function () {
 
 		return driver
 			.performTouchAction(dragToRight)
-			.waitForElementByName('Basic Slider - value = 6 act val 6', asserters.isDisplayed);
+			.waitForElementByName('Basic Slider - value = 6 act val 6', webdriver.asserters.isDisplayed);
 	});
 
 	it('go back to beginning of app', function () {
@@ -85,8 +81,38 @@ describe('KS iOS Slider', function () {
 describe('KS iOS Labels', function () {
 	this.timeout(300000);
 
-	it.skip('do labels stuff', function () {
+	it('should check for appcelerator label', function () {
+		return driver
+			// need to wait for the label name to appear, since the transition on the app is slow for appium to keep up
+			.waitForElementByName('Label', webdriver.asserters.isDisplayed)
+			.click()
+			.elementByName('Basic')
+			.click()
+			.waitForElementByName('Appcelerator', webdriver.asserters.isDisplayed);
+	});
 
+	it('should check for appcelerator label 2', function () {
+		return driver
+			.elementByName('Change Label 2')
+			.click()
+			.waitForElementByName('Appcelerator', webdriver.asserters.isDisplayed);
+	});
+
+	it('should check for appcelerator label with background', function () {
+		const loremText = 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat';
+
+		return driver
+			.elementByName('Label 1 background', webdriver.asserters.isDisplayed)
+			.click()
+			.waitForElementByName(loremText, webdriver.asserters.isDisplayed);
+	});
+
+	it('go back to beginning of app', function () {
+		return driver
+			.elementByName('Label')
+			.click()
+			.elementByName('Controls')
+			.click();
 	});
 });
 
@@ -94,8 +120,52 @@ describe('KS iOS Labels', function () {
 describe('KS iOS Text Area', function () {
 	this.timeout(300000);
 
-	it.skip('do text area stuff', function () {
+	it('should check text in text area', function () {
+		return driver
+			.waitForElementByName('Text Area', webdriver.asserters.isDisplayed)
+			.click()
+			.elementByName('Basic')
+			.click()
+			.waitForElementByName('I am a textarea', webdriver.asserters.isDisplayed);
+	});
 
+	it('should delete (backspace) default text and enter some text', function () {
+		const BACKSPACES = [
+			webdriver.SPECIAL_KEYS['Back space'], // yes, backspace is spelled incorrectly
+			webdriver.SPECIAL_KEYS['Back space'],
+			webdriver.SPECIAL_KEYS['Back space'],
+			webdriver.SPECIAL_KEYS['Back space'],
+			webdriver.SPECIAL_KEYS['Back space'],
+			webdriver.SPECIAL_KEYS['Back space'],
+			webdriver.SPECIAL_KEYS['Back space'],
+			webdriver.SPECIAL_KEYS['Back space']
+		];
+
+		return driver
+			.elementByClassName('XCUIElementTypeTextView')
+			.click() // brings up the soft keyboard
+			.keys(BACKSPACES) // looks like this method accepts an array ...
+			.keys('monkey') // or a string
+			.waitForElementByName('I am a monkey', webdriver.asserters.isDisplayed);
+	});
+
+	it('should delete (clear text area) text and enter new text', function () {
+		const NEW_TEXT = 'MONKEYLORD WILL RULE THIS WORLD!';
+
+		return driver
+			.elementByClassName('XCUIElementTypeTextView')
+			.clear()
+			.click() // brings up the soft keyboard again
+			.keys(NEW_TEXT)
+			.waitForElementByName(NEW_TEXT, webdriver.asserters.isDisplayed);
+	});
+
+	it('go back to beginning of app', function () {
+		return driver
+			.elementByName('Text Area')
+			.click()
+			.elementByName('Controls')
+			.click();
 	});
 });
 

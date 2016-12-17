@@ -2,7 +2,7 @@ function slider_basic(_args) {
 	var win = Ti.UI.createWindow({
 		title:_args.title
 	});
-	
+
 	//
 	// BASIC SLIDER
 	//
@@ -18,7 +18,7 @@ function slider_basic(_args) {
 		width:300,
 		height:'auto'
 	});
-	
+
 	var basicSlider = Titanium.UI.createSlider({
 		min:0,
 		max:10,
@@ -41,7 +41,7 @@ function slider_basic(_args) {
 		Ti.API.info('Touch ended: '+e.value);
 	});
 	basicSlider.value = 0; // For regression test purposes
-	
+
 	//
 	// CUSTOM SLIDER
 	//
@@ -57,7 +57,7 @@ function slider_basic(_args) {
 		width:300,
 		height:'auto'
 	});
-	
+
 	var customSlider = Titanium.UI.createSlider({
 		min:0,
 		max:100,
@@ -73,8 +73,8 @@ function slider_basic(_args) {
 	{
 		customSliderLabel.text = 'Custom Slider - value = ' + Math.round(e.value);
 	});
-	
-	
+
+
 	//
 	// CHANGE SLIDER
 	//
@@ -94,7 +94,7 @@ function slider_basic(_args) {
 		basicSlider.thumbImage = '/images/slider_thumb.png';
 		basicSlider.highlightedThumbImage = '/images/slider_thumb.png';
 	});
-	
+
 	//
 	// TOGGLE SLIDER VISIBILITY
 	//
@@ -104,7 +104,7 @@ function slider_basic(_args) {
 		width:200,
 		top:170
 	});
-	
+
 	var visible = true;
 	toggleButton.addEventListener('click', function()
 	{
@@ -120,10 +120,10 @@ function slider_basic(_args) {
 			customSlider.show();
 			visible=true;
 		}
-	
+
 	});
-	
-	
+
+
 	//
 	// SLIDER NAVBAR
 	//
@@ -153,7 +153,7 @@ function slider_basic(_args) {
 			inNavbar = false;
 		}
 	});
-	
+
 	//
 	// SLIDER TOOLBAR
 	//
@@ -162,7 +162,7 @@ function slider_basic(_args) {
 		height:40,
 		width:200,
 		top:270
-	
+
 	});
 	var inToolbar = false;
 	toolbarButton.addEventListener('click', function()
@@ -184,7 +184,7 @@ function slider_basic(_args) {
 			inToolbar = false;
 		}
 	});
-	
+
 	//
 	// SLIDER TO TITLE CONTROL
 	//
@@ -194,8 +194,8 @@ function slider_basic(_args) {
 		width:200,
 		top:320
 	});
-	
-	
+
+
 	var inTitle = false;
 	titleButton.addEventListener('click', function()
 	{
@@ -218,7 +218,7 @@ function slider_basic(_args) {
 			inTitle=true;
 		}
 	});
-	
+
 	win.add(basicSliderLabel);
 	win.add(basicSlider);
 	win.add(toggleButton);
@@ -232,7 +232,7 @@ function slider_basic(_args) {
 		win.add(customSlider);
 	}
 	win.add(changeButton);
-	
+
 	return win;
 }
 
