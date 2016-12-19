@@ -183,7 +183,31 @@ describe('KS iOS List View', function () {
 describe('KS iOS Image Views', function () {
 	this.timeout(300000);
 
-	it.skip('do image view stuff', function () {
+	it('should find the apple logo by class name', function () {
+		return driver
+			.waitForElementByName('Base UI', webdriver.asserters.isDisplayed)
+			.click()
+			.waitForElementByName('Views', webdriver.asserters.isDisplayed)
+			.click()
+			.waitForElementByName('Image Views', webdriver.asserters.isDisplayed)
+			.click()
+			.waitForElementByName('Image File', webdriver.asserters.isDisplayed)
+			.click()
+			.waitForElementByClassName('XCUIElementTypeImage', webdriver.asserters.isDisplayed);
+	});
 
+	it('should find the apple logo\'s pixel size', function () {
+		return driver
+			.waitForElementByClassName('XCUIElementTypeImage', webdriver.asserters.isDisplayed)
+			.getSize()
+				.should.eventually.eql({'width':24, 'height':24}); // alias for deep equal
+	});
+
+	it('should take screenshot and save it to local machine', function () {
+		const TO_HERE = '/Users/wluu/Desktop/screenshot.png';
+
+		return driver
+			.takeScreenshot()
+			.saveScreenshot(TO_HERE);
 	});
 });
