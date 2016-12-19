@@ -1,5 +1,4 @@
 {
-	// follow es6 standards
 	"esversion": 6,
 	"node": true,
 	"mocha": true
