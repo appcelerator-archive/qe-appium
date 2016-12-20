@@ -125,7 +125,7 @@ describe('KS Android Labels', function () {
 describe('KS Android Text Area', function () {
 	this.timeout(300000);
 
-	it('should check text in text area', function () {
+	it.skip('should check text in text area', function () {
 		return driver
 			.elementByAndroidUIAutomator('new UiSelector().text("Text Area")')
 			.click()
@@ -181,20 +181,53 @@ describe('KS Android Text Area', function () {
 	});
 });
 
+// Base UI > Views > Image Views > Image File
+describe('KS Android Image Views', function () {
+	this.timeout(300000);
+
+	it('should find the apple logo by class name', function () {
+		return driver
+			.elementByAndroidUIAutomator('new UiSelector().className("android.widget.EditText")')
+			.waitForElementByName('Base UI', webdriver.asserters.isDisplayed)
+			.click()
+			.waitForElementByName('Views', webdriver.asserters.isDisplayed)
+			.click()
+			.waitForElementByName('Image Views', webdriver.asserters.isDisplayed)
+			.click()
+			.waitForElementByName('Image File', webdriver.asserters.isDisplayed)
+			.click()
+			.waitForElementByClassName('XCUIElementTypeImage', webdriver.asserters.isDisplayed);
+	});
+
+	it.skip('should find the apple logo\'s pixel size', function () {
+		return driver
+			.waitForElementByClassName('XCUIElementTypeImage', webdriver.asserters.isDisplayed)
+			.getSize()
+				.should.eventually.eql({'width':24, 'height':24}); // alias for deep equal
+	});
+
+	it.skip('should take screenshot and save it to local machine', function () {
+		const TO_HERE = '/Users/wluu/Desktop/screenshot.png';
+
+		return driver
+			.takeScreenshot()
+			.saveScreenshot(TO_HERE);
+	});
+
+	it.skip('go back to "views" pane', function () {
+		return driver
+			.elementByName('Image Views')
+			.click()
+			.elementByName('Views')
+			.click();
+	});
+});
+
 // Base UI > Views > List View > Built in Templates
 describe('KS Android List View', function () {
 	this.timeout(300000);
 
 	it.skip('do list view stuff', function () {
-
-	});
-});
-
-// Base UI > Views > Image Views > Image File
-describe('KS Android Image Views', function () {
-	this.timeout(300000);
-
-	it.skip('do image view stuff', function () {
 
 	});
 });
