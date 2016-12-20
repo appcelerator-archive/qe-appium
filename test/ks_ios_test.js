@@ -169,16 +169,6 @@ describe('KS iOS Text Area', function () {
 	});
 });
 
-
-// Base UI > Views > List View > Built in Templates
-describe('KS iOS List View', function () {
-	this.timeout(300000);
-
-	it.skip('do list view stuff', function () {
-
-	});
-});
-
 // Base UI > Views > Image Views > Image File
 describe('KS iOS Image Views', function () {
 	this.timeout(300000);
@@ -209,5 +199,22 @@ describe('KS iOS Image Views', function () {
 		return driver
 			.takeScreenshot()
 			.saveScreenshot(TO_HERE);
+	});
+
+	it('go back to "views" pane', function () {
+		return driver
+			.elementByName('Image Views')
+			.click()
+			.elementByName('Views')
+			.click();
+	});
+});
+
+// Base UI > Views > List View > Built in Templates
+describe('KS iOS List View', function () {
+	this.timeout(300000);
+
+	it.skip('do list view stuff', function () {
+
 	});
 });
