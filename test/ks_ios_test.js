@@ -201,9 +201,21 @@ describe('KS iOS Image Views', function () {
 			.saveScreenshot(TO_HERE);
 	});
 
+	it('should handle alert dialogs too', function () {
+		return driver
+			.elementByClassName('XCUIElementTypeImage')
+			.click() // trigger the alert dialog
+			.waitForElementByClassName('XCUIElementTypeAlert', webdriver.asserters.isDisplayed)
+			.waitForElementByName('You clicked me!', webdriver.asserters.isDisplayed)
+			.elementByName('OK')
+			.click()
+			.hasElementByClassName('XCUIElementTypeAlert')
+				.should.eventually.be.false;
+	});
+
 	it('go back to "views" pane', function () {
 		return driver
-			.elementByName('Image Views')
+			.waitForElementByName('Image Views', webdriver.asserters.isDisplayed)
 			.click()
 			.elementByName('Views')
 			.click();

@@ -125,7 +125,7 @@ describe('KS Android Labels', function () {
 describe('KS Android Text Area', function () {
 	this.timeout(300000);
 
-	it.skip('should check text in text area', function () {
+	it('should check text in text area', function () {
 		return driver
 			.elementByAndroidUIAutomator('new UiSelector().text("Text Area")')
 			.click()
@@ -176,8 +176,7 @@ describe('KS Android Text Area', function () {
 			.performTouchAction(LOSE_FOCUS)
 			.back()
 			.back()
-			.back() // need another back action to get back to the beginning of the app; hmmm
-			.sleep(3000);
+			.back(); // need another back action to get back to the beginning of the app; hmmm
 	});
 });
 
@@ -187,26 +186,25 @@ describe('KS Android Image Views', function () {
 
 	it('should find the apple logo by class name', function () {
 		return driver
-			.elementByAndroidUIAutomator('new UiSelector().className("android.widget.EditText")')
-			.waitForElementByName('Base UI', webdriver.asserters.isDisplayed)
+			.elementByAndroidUIAutomator('new UiSelector().text("Base UI")')
 			.click()
-			.waitForElementByName('Views', webdriver.asserters.isDisplayed)
+			.elementByAndroidUIAutomator('new UiSelector().text("Views")')
 			.click()
-			.waitForElementByName('Image Views', webdriver.asserters.isDisplayed)
+			.elementByAndroidUIAutomator('new UiSelector().text("Image Views")')
 			.click()
-			.waitForElementByName('Image File', webdriver.asserters.isDisplayed)
+			.elementByAndroidUIAutomator('new UiSelector().text("Image File")')
 			.click()
-			.waitForElementByClassName('XCUIElementTypeImage', webdriver.asserters.isDisplayed);
+			.elementByAndroidUIAutomator('new UiSelector().className("android.widget.ImageView")');
 	});
 
-	it.skip('should find the apple logo\'s pixel size', function () {
+	it('should find the apple logo\'s pixel size', function () {
 		return driver
-			.waitForElementByClassName('XCUIElementTypeImage', webdriver.asserters.isDisplayed)
+			.elementByAndroidUIAutomator('new UiSelector().className("android.widget.ImageView")')
 			.getSize()
-				.should.eventually.eql({'width':24, 'height':24}); // alias for deep equal
+				.should.eventually.eql({'width':48, 'height':48}); // alias for deep equal
 	});
 
-	it.skip('should take screenshot and save it to local machine', function () {
+	it('should take screenshot and save it to local machine', function () {
 		const TO_HERE = '/Users/wluu/Desktop/screenshot.png';
 
 		return driver
@@ -214,12 +212,22 @@ describe('KS Android Image Views', function () {
 			.saveScreenshot(TO_HERE);
 	});
 
-	it.skip('go back to "views" pane', function () {
+	it('should handle alert dialogs too', function () {
 		return driver
-			.elementByName('Image Views')
-			.click()
-			.elementByName('Views')
-			.click();
+			.elementByAndroidUIAutomator('new UiSelector().className("android.widget.ImageView")')
+			.click() // trigger the alert dialog
+			// looks like Titanium.UI.createAlertDialog is using the FrameLayout class to create custom dialogs: https://developer.android.com/reference/android/app/AlertDialog.html
+			// so, when the "alert dialog" appears, look for text from the alert dialog
+			.elementByAndroidUIAutomator('new UiSelector().text("You clicked me!")')
+			.back() // press back to dismiss the alert dialog
+			.hasElementByAndroidUIAutomator('new UiSelector().text("You clicked me!")')
+				.should.eventually.be.false;
+	});
+
+	it('go back to "views" pane', function () {
+		return driver
+			.back()
+			.back();
 	});
 });
 
