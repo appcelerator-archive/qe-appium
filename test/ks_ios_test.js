@@ -226,7 +226,39 @@ describe('KS iOS Image Views', function () {
 describe('KS iOS List View', function () {
 	this.timeout(300000);
 
-	it.skip('do list view stuff', function () {
+	it('move to the List View pane', function () {
+		return driver
+			.waitForElementByName('List View', webdriver.asserters.isDisplayed)
+			.click()
+			.waitForElementByName('Built in templates', webdriver.asserters.isDisplayed)
+			.click()
+			.waitForElementByName('TEMPLATE_DEFAULT', webdriver.asserters.isDisplayed);
+	});
 
+	it('should scroll to bottom of list using "execute"', function () {
+		// appium can't seem to find elements via waitForElement or elementBy in out list view
+		// need to use xpath, but xpath is not recommonded unless you have no other choice; it's pretty slow
+		// https://github.com/appium/appium/blob/master/docs/en/advanced-concepts/migrating-to-xcuitest.md#xpath-locator-strategy
+
+		return driver
+			.execute('mobile: scroll', {direction: 'down'}) // the element argument doesn't seem to work for some reason; passing just the direction argument scrolls twice
+			.waitForElementByXPath('//*/XCUIElementTypeCell[27]', webdriver.asserters.isDisplayed) // 27th row
+			.execute('mobile: scroll', {direction: 'down'})
+			.waitForElementByXPath('//*/XCUIElementTypeCell[40]', webdriver.asserters.isDisplayed); // last row in the list view
+	});
+
+	it('should scroll back to top of list using "TouchAction"', function () {
+		const scrollUp = new webdriver.TouchAction()
+			.press({x:200, y:80}) // press near the top of the list
+			.moveTo({x:0, y:500}) // drag finger down
+			.release(); // release finger
+
+		return driver
+			.performTouchAction(scrollUp)
+			.waitForElementByName('TEMPLATE_SUBTITLE', webdriver.asserters.isDisplayed)
+			.performTouchAction(scrollUp)
+			.waitForElementByName('TEMPLATE_SETTINGS', webdriver.asserters.isDisplayed)
+			.performTouchAction(scrollUp)
+			.waitForElementByName('TEMPLATE_DEFAULT', webdriver.asserters.isDisplayed);
 	});
 });
