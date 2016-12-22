@@ -235,7 +235,32 @@ describe('KS Android Image Views', function () {
 describe('KS Android List View', function () {
 	this.timeout(300000);
 
-	it.skip('do list view stuff', function () {
+	it('move to the List View pane', function () {
+		return driver
+			.elementByAndroidUIAutomator('new UiSelector().text("List View")')
+			.click()
+			.elementByAndroidUIAutomator('new UiSelector().text("Built in templates")')
+			.click()
+			.elementByAndroidUIAutomator('new UiSelector().text("TEMPLATE_DEFAULT")');
+	});
 
+	// NOTE: execute method doesn't work on android
+	it.skip('should scroll to bottom of list using "execute"', function () {
+		return driver
+			.execute('mobile: scroll', {direction: 'down'}) // the element argument doesn't seem to work for some reason; passing just the direction argument scrolls twice
+			.sleep();
+	});
+
+	it('should scroll down to bottom of list using "TouchAction"', function () {
+		const scrollUp = new webdriver.TouchAction()
+			.press({x:386, y:1034}) // press near the bottom of the list
+			.moveTo({x:0, y:-530}) // drag finger up
+			.release(); // release finger
+
+		const LONG_TEXT = '29 I have checkmark accessory  Clip... Clip... Clip... Clip... Clip... Clip... Clip... Clip... Clip... Clip... Clip... Clip... Clip... Clip... Clip... Clip... Clip... Clip... Clip... Clip... Clip... Clip... Clip... Clip... Clip... Clip... Clip... Clip... Clip... Clip... ';
+
+		return driver
+			.performTouchAction(scrollUp)
+			.elementByAndroidUIAutomator(`new UiSelector().text("${LONG_TEXT}")`);
 	});
 });

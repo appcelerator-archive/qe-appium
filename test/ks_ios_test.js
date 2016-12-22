@@ -236,9 +236,15 @@ describe('KS iOS List View', function () {
 	});
 
 	it('should scroll to bottom of list using "execute"', function () {
-		// appium can't seem to find elements via waitForElement or elementBy in out list view
-		// need to use xpath, but xpath is not recommonded unless you have no other choice; it's pretty slow
-		// https://github.com/appium/appium/blob/master/docs/en/advanced-concepts/migrating-to-xcuitest.md#xpath-locator-strategy
+		/*
+			NEW NOTE: appium CAN find elements in our list view. didn't realize there was a whitespace after the ellipses: '0 I have no accessory  Clip... '
+			however, the statement below about xpath is still valid.
+
+			OLD NOTE:
+			appium can't seem to find elements via waitForElement or elementBy in out list view.
+			need to use xpath, but xpath is not recommonded unless you have no other choice; it's pretty slow.
+			https://github.com/appium/appium/blob/master/docs/en/advanced-concepts/migrating-to-xcuitest.md#xpath-locator-strategy.
+		*/
 
 		return driver
 			.execute('mobile: scroll', {direction: 'down'}) // the element argument doesn't seem to work for some reason; passing just the direction argument scrolls twice

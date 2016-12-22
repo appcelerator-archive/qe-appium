@@ -90,7 +90,8 @@ function getDataDefaultTemplate(){
     var titleStr = '';
  	var subtitleStr = '';
 
-    for(i=0;i<10;i++) {
+	var MAX_ROWS = (Titanium.Platform.osname === 'android') ? 30 : 10;
+    for(i=0;i<MAX_ROWS;i++) {
         var mod = i%4;
         titleStr += 'Clip... ';
         var acType = Ti.UI.LIST_ACCESSORY_TYPE_NONE;
@@ -119,36 +120,36 @@ function list_basic(_args) {
 	var win = Ti.UI.createWindow({
 		title:'Built in Templates'
 	});
-	
+
 	var platformName = Titanium.Platform.osname;
 	var isIOS = (platformName == 'iphone' || platformName == 'ipad');
-	
+
 	var listView = Ti.UI.createListView();
 	if (isIOS) {
 		listView.style=Ti.UI.iPhone.ListViewStyle.GROUPED
 	}
-	
+
 	var sections = [];
-	
+
 	var listSection1 = Ti.UI.createListSection({
         headerTitle:'TEMPLATE_DEFAULT'
     })
     listSection1.setItems(getDataDefaultTemplate());
     sections.push(listSection1);
-	
+
 	if (isIOS) {
 		var listSection2 = Ti.UI.createListSection({
 	        headerTitle:'TEMPLATE_SETTINGS'
 	    })
 	    listSection2.setItems(getDataSettingsTemplate());
 	    sections.push(listSection2);
-	
+
 		var listSection3 = Ti.UI.createListSection({
 	        headerTitle:'TEMPLATE_SUBTITLE'
 	    })
 	    listSection3.setItems(getDataSubtitleTemplate());
 	    sections.push(listSection3);
-	
+
 		var listSection4 = Ti.UI.createListSection({
 	        headerTitle:'TEMPLATE_CONTACTS'
 	    })
@@ -156,9 +157,9 @@ function list_basic(_args) {
 	    sections.push(listSection4);
 	}
 	listView.setSections(sections);
-	
+
 	win.add(listView);
-	
+
 	return win;
 };
 
