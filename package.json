@@ -4,7 +4,8 @@
   "description": "Appium Research",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test/*_test.js"
+    "test": "mocha test/ks_*_test.js",
+	"test-device": "mocha test/android_push_test.js"
   },
   "repository": {
     "type": "git",
