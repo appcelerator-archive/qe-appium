@@ -23,6 +23,41 @@ before('suite setup', function () {
 
 	webdriver = setup.getWd();
 
+	// sendNotificationTo is a custom method added to the webdriver prototype chain; can be used later
+	webdriver.addAsyncMethod('sendNotificationTo', function (deviceToken) {
+		// from here: https://github.com/admc/wd/blob/master/examples/promise/add-method-async.js#L23
+		const CALLBACK = webdriver.findCallback(arguments);
+
+		const DATA = JSON.stringify({
+			channel: 'a',
+			payload: { "alert": "Sample alert", "title": "BLEH" },
+			to_tokens: deviceToken
+		});
+
+		const XML = fs.readFileSync(path.join(__dirname, '../monkeyjunk/tiapp.xml'), {encoding: 'utf8'});
+		let key = XML.match(/<property .+acs-api-key-development.+>.+<\/property>/g)[0]; // find the acs-api-key-development property in the tiapp.xml
+		key = key.match(/>.+</g)[0]; // get the value in between ><
+		key = key.slice(1); // remove > character
+		key = key.slice(0, key.length - 1); // and remove < character
+		const PATH = `/v1/push_notification/notify_tokens.json?key=${key}&pretty_json=true`;
+
+		const OPTS = {
+			hostname: 'preprod-api.cloud.appctest.com',
+			path: PATH,
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' }
+		};
+
+		https.request(OPTS, function (res) {
+			res.on('data', function (chunk) {
+				// i still don't understand why you need this part in order for the end event to be triggered
+				console.log(chunk.toString());
+			});
+			res.on('end', CALLBACK);
+		})
+		.end(DATA);
+	});
+
 	// appium local server
 	driver = webdriver.promiseChainRemote({
 		host: 'localhost',
@@ -81,40 +116,27 @@ describe('Android push', function () {
 			});
 	});
 
-	it('should send push notification via REST request', function (done) {
-		const DATA = JSON.stringify({
-			channel: 'a',
-			payload: { "alert": "Sample alert", "title": "BLEH" },
-			to_tokens: deviceToken
-		});
-
-		const XML = fs.readFileSync(path.join(__dirname, '../monkeyjunk/tiapp.xml'), {encoding: 'utf8'});
-		let key = XML.match(/<property .+acs-api-key-development.+>.+<\/property>/g)[0]; // find the acs-api-key-development property in the tiapp.xml
-		key = key.match(/>.+</g)[0]; // get the value in between ><
-		key = key.slice(1); // remove > character
-		key = key.slice(0, key.length - 1); // and remove < character
-		const PATH = `/v1/push_notification/notify_tokens.json?key=${key}&pretty_json=true`;
-
-		const OPTS = {
-			hostname: 'preprod-api.cloud.appctest.com',
-			path: PATH,
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' }
-		};
-
-		https.request(OPTS, function (res) {
-			res.on('data', function (chunk) {
-				// i still don't understand why you need this part in order for the end event to be triggered
-				console.log(chunk.toString());
-			});
-			res.on('end', done);
-		})
-		.end(DATA);
+	it('should send push notification via REST request', function () {
+		return driver.sendNotificationTo(deviceToken);
 	});
 
-	it.skip('should receive push notification in the foreground', function () {
+	it('should receive push notification in the foreground', function () {
+		const EXP = 'BLEH, Sample alert';
 
+		return driver
+			.waitForElementByAndroidUIAutomator('new UiSelector().text("Alert")',
+				webdriver.asserters.isDisplayed,
+				10000 // 10 seconds timeout
+			)
+			.elementById('android:id/message')
+			.text().should.become(EXP)
+			.elementByAndroidUIAutomator('new UiSelector().text("OK")')
+			.click(); // dismiss the alert dialog
 	});
 
-	it.skip('should get push notification in the background', function () {});
+	it('should get push notification in the background', function () {
+		return driver
+			.backgroundApp(10) // seconds
+			.sleep(5000);
+	});
 });
