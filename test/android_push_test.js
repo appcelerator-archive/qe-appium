@@ -35,14 +35,23 @@ before('suite setup', function () {
 		});
 
 		const XML = fs.readFileSync(path.join(__dirname, '../monkeyjunk/tiapp.xml'), {encoding: 'utf8'});
-		let key = XML.match(/<property .+acs-api-key-development.+>.+<\/property>/g)[0]; // find the acs-api-key-development property in the tiapp.xml
+
+		// find the acs-base-url-development property in the tiapp.xml
+		let host = XML.match(/<property .+acs-base-url-development.+>.+<\/property>/g)[0];
+		host = host.match(/>.+</g)[0]; // get the value in between ><
+		host = host.slice(1); // remove > character
+		host = host.slice(0, host.length - 1); // and remove < character
+		host = host.slice('https://'.length); // remove 'https://' from the string
+
+		// find the acs-api-key-development property in the tiapp.xml
+		let key = XML.match(/<property .+acs-api-key-development.+>.+<\/property>/g)[0];
 		key = key.match(/>.+</g)[0]; // get the value in between ><
 		key = key.slice(1); // remove > character
 		key = key.slice(0, key.length - 1); // and remove < character
 		const PATH = `/v1/push_notification/notify_tokens.json?key=${key}&pretty_json=true`;
 
 		const OPTS = {
-			hostname: 'preprod-api.cloud.appctest.com',
+			hostname: host,
 			path: PATH,
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' }
@@ -134,9 +143,34 @@ describe('Android push', function () {
 			.click(); // dismiss the alert dialog
 	});
 
-	it('should get push notification in the background', function () {
+	it('should get push notification in the background; checking tray notification', function () {
 		return driver
-			.backgroundApp(10) // seconds
-			.sleep(5000);
+			/*
+				NOTE:
+				pressing the home button should background the app
+				closeApp() kills the app
+				backgroundApp() backgrounds the app, but will wait the specified seconds before bringing the app the foreground and continuing
+			*/
+			.deviceKeyEvent(3) // https://developer.android.com/reference/android/view/KeyEvent.html#KEYCODE_HOME
+			.sendNotificationTo(deviceToken)
+			.openNotifications()
+			.waitForElementByAndroidUIAutomator('new UiSelector().text("BLEH")',
+				webdriver.asserters.isDisplayed,
+				10000 // 10 seconds timeout
+			);
+	});
+
+	it('press on tray notification and should bring app to foreground', function () {
+		const EXP = 'BLEH, Sample alert';
+
+		return driver
+			.elementByAndroidUIAutomator('new UiSelector().text("BLEH")')
+			.click()
+			.waitForElementByAndroidUIAutomator('new UiSelector().text("Alert")', // the alert dialog should appear when app is brought to the foreground
+				webdriver.asserters.isDisplayed,
+				5000 // 5 seconds timeout
+			)
+			.elementById('android:id/message')
+			.text().should.become(EXP);
 	});
 });
