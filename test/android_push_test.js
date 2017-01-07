@@ -26,45 +26,45 @@ before('suite setup', function () {
 	// sendNotificationTo is a custom method added to the webdriver prototype chain; can be used later
 	webdriver.addAsyncMethod('sendNotificationTo', function (deviceToken) {
 		// from here: https://github.com/admc/wd/blob/master/examples/promise/add-method-async.js#L23
-		const CALLBACK = webdriver.findCallback(arguments);
+		const callback = webdriver.findCallback(arguments);
 
-		const DATA = JSON.stringify({
+		const data = JSON.stringify({
 			channel: 'a',
 			payload: { "alert": "Sample alert", "title": "BLEH" },
 			to_tokens: deviceToken
 		});
 
-		const XML = fs.readFileSync(path.join(__dirname, '../monkeyjunk/tiapp.xml'), {encoding: 'utf8'});
+		const xmlContent = fs.readFileSync(path.join(__dirname, '../monkeyjunk/tiapp.xml'), {encoding: 'utf8'});
 
 		// find the acs-base-url-development property in the tiapp.xml
-		let host = XML.match(/<property .+acs-base-url-development.+>.+<\/property>/g)[0];
+		let host = xmlContent.match(/<property .+acs-base-url-development.+>.+<\/property>/g)[0];
 		host = host.match(/>.+</g)[0]; // get the value in between ><
 		host = host.slice(1); // remove > character
 		host = host.slice(0, host.length - 1); // and remove < character
 		host = host.slice('https://'.length); // remove 'https://' from the string
 
 		// find the acs-api-key-development property in the tiapp.xml
-		let key = XML.match(/<property .+acs-api-key-development.+>.+<\/property>/g)[0];
+		let key = xmlContent.match(/<property .+acs-api-key-development.+>.+<\/property>/g)[0];
 		key = key.match(/>.+</g)[0]; // get the value in between ><
 		key = key.slice(1); // remove > character
 		key = key.slice(0, key.length - 1); // and remove < character
-		const PATH = `/v1/push_notification/notify_tokens.json?key=${key}&pretty_json=true`;
+		const notifyApi = `/v1/push_notification/notify_tokens.json?key=${key}&pretty_json=true`;
 
-		const OPTS = {
+		const options = {
 			hostname: host,
-			path: PATH,
+			path: notifyApi,
 			method: 'POST',
 			headers: { 'Content-Type': 'application/json' }
 		};
 
-		https.request(OPTS, function (res) {
+		https.request(options, function (res) {
 			res.on('data', function (chunk) {
 				// i still don't understand why you need this part in order for the end event to be triggered
 				console.log(chunk.toString());
 			});
-			res.on('end', CALLBACK);
+			res.on('end', callback);
 		})
-		.end(DATA);
+		.end(data);
 	});
 
 	// appium local server

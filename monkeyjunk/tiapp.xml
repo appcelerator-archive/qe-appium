@@ -12,7 +12,7 @@
   <fullscreen>false</fullscreen>
   <navbar-hidden>false</navbar-hidden>
   <analytics>true</analytics>
-  <guid>773a1768-cf70-4e9c-9888-7c5a65727a7a</guid>
+  <guid>c2f31eba-6803-4483-9777-0526eca1805c</guid>
   <property name="ti.ui.defaultunit" type="string">dp</property>
   <property name="run-on-main-thread" type="bool">true</property>
   <ios>
@@ -62,20 +62,13 @@
     <target device="iphone">true</target>
   </deployment-targets>
   <sdk-version>6.0.1.GA</sdk-version>
-  <property name="acs-authbase-url-development" type="string">https://secure-identity.cloud.appcelerator.com</property>
-  <property name="acs-base-url-development" type="string">https://api.cloud.appcelerator.com</property>
-  <property name="acs-oauth-secret-development" type="string">rNhOqMA9TRlsiYyRC8zTnFAJrD03rckZ</property>
-  <property name="acs-oauth-key-development" type="string">qvaPjKdLoTbLnGpCqPGHtd5rUeqmYusY</property>
-  <property name="acs-api-key-development" type="string">8UwTf0SKMFXH8EZXM9e77glTDcSN84Vi</property>
+  <property name="acs-authbase-url-development" type="string">https://dolphin-secure-identity.cloud.appcelerator.com</property>
+  <property name="acs-base-url-development" type="string">https://preprod-api.cloud.appctest.com</property>
+  <property name="acs-oauth-secret-development" type="string">TDPmMm7XIUuVJAF3JOhYQFwXXHwI3wta</property>
+  <property name="acs-oauth-key-development" type="string">0LRL9iQxKLiAcPjlwJOC5MeKQwNlpXmy</property>
+  <property name="acs-api-key-development" type="string">X4t96j6hcenBiQ5a0wKI76jsOqbA3rLg</property>
   <property name="acs-username-development" type="string">appc_app_user_dev</property>
-  <property name="acs-password-development" type="string">nwyNejYdvwx5fcpL4c</property>
-  <property name="acs-authbase-url-production" type="string">https://secure-identity.cloud.appcelerator.com</property>
-  <property name="acs-base-url-production" type="string">https://api.cloud.appcelerator.com</property>
-  <property name="acs-oauth-secret-production" type="string">DQisNwGx3K0sWXVFq2XUXsnd88StjiWb</property>
-  <property name="acs-oauth-key-production" type="string">e3tPbqhsK0Q3eoQeLa2e9ynTkMBQkWg4</property>
-  <property name="acs-api-key-production" type="string">4BAi79iZDNO9AXoiv5eMl88i3cytv12e</property>
-  <property name="acs-username-production" type="string">appc_app_user</property>
-  <property name="acs-password-production" type="string">1HTvy5gY9J7Cma84lB</property>
-  <!-- <property name="acs-push-api-url-development" type="string">https://preprod-api.cloud.appctest.com/v1/</property>
-  <property name="acs-push-coordinator-url-development" type="string">https://dolphin-push-coordinator.cloud.appcelerator.com/v1/</property> -->
+  <property name="acs-password-development" type="string">nnLSfFGjVvPWlFDdP1</property>
+  <property name="acs-push-api-url-development" type="string">https://preprod-api.cloud.appctest.com/v1/</property>
+  <property name="acs-push-coordinator-url-development" type="string">https://dolphin-push-coordinator.cloud.appcelerator.com/v1/</property>
 </ti:app>
