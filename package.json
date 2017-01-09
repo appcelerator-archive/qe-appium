@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha test/ks_*_test.js",
-	"test-device": "mocha test/android_push_test.js"
+	"test-android-device": "mocha test/android_push_test.js",
+	"test-ios-device": "mocha test/ios_push_test.js"
   },
   "repository": {
     "type": "git",
