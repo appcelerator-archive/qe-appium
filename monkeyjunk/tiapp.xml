@@ -59,7 +59,6 @@
   </modules>
   <deployment-targets>
     <target device="android">true</target>
-    <target device="iphone">true</target>
   </deployment-targets>
   <sdk-version>6.0.1.GA</sdk-version>
   <property name="acs-authbase-url-development" type="string">https://dolphin-secure-identity.cloud.appcelerator.com</property>
