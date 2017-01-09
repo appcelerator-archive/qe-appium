@@ -22,36 +22,34 @@ button.addEventListener('click', function () {
 
 	// need to retrieve the device token first
 	Push.retrieveDeviceToken({
-		success: successCb,
+		success: function (retrieve) {
+			// after getting the device token, add the event listeners
+			Push.addEventListener('callback', function (e) {
+				// e.payload is a json string
+				var
+					payload = JSON.parse(e.payload).android,
+					msg = payload.title + ', ' +  payload.alert;
+				alert(msg);
+			});
+
+			// then, subscribe with the device token
+			Cloud.PushNotifications.subscribeToken({
+				channel: 'a',
+				device_token: retrieve.deviceToken,
+				type: 'gcm'
+			}, function (subscribe) {
+				if (subscribe.success) {
+					alert('Subscribed with token: ' + retrieve.deviceToken);
+				}
+				else {
+					alert(JSON.stringify(subscribe));
+				}
+			});
+		},
 		error: function (e) {
 			alert('Failed to register for push: ' + e.error);
 		}
 	});
-
-	function successCb(retrieve) {
-		// after getting the device token, add the event listeners
-		Push.addEventListener('callback', function (e) {
-			// e.payload is a json string
-			var
-				payload = JSON.parse(e.payload).android,
-				msg = payload.title + ', ' +  payload.alert;
-			alert(msg);
-		});
-
-		// then, subscribe with the device token
-		Cloud.PushNotifications.subscribeToken({
-			channel: 'a',
-			device_token: retrieve.deviceToken,
-			type: 'gcm'
-		}, function (subscribe) {
-			if (subscribe.success) {
-				alert('Subscribed with token: ' + retrieve.deviceToken);
-			}
-			else {
-				alert(JSON.stringify(subscribe));
-			}
-		});
-	}
 });
 
 win.add(button);
