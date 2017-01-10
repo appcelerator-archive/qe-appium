@@ -78,13 +78,12 @@ before('suite setup', function () {
 
 	// specify target test app and ios simulator
 	return driver.init({
-		automationName: 'Appium',
-		platformName: 'Android',
-		platformVersion: '7.1',
-		deviceName: 'FA6AR0303369',
-		app: '/Users/wluu/github/qe-appium/monkeyjunk/build/android/bin/monkeyjunk.apk',
-		appPackage: 'com.appc.junk',
-		appActivity: '.MonkeyjunkActivity'
+		automationName: 'XCUITest',
+	    platformName: 'iOS',
+	    deviceName: 'Pippin',
+	    platformVersion: '9.3.4',
+	    udid: 'f8052c8714f0b9585a8f89274f447bbd4eda1601',
+		app: '/Users/wluu/github/qe-appium/monkeypush/build/iphone/build/Products/Debug-iphoneos/monkeypush.ipa'
 	});
 });
 
@@ -94,42 +93,43 @@ after('suite teardown', function () {
 	return driver.quit();
 });
 
-describe('Android push', function () {
+describe('iOS push', function () {
 	this.timeout(300000);
 
 	let deviceToken = '';
 
-	it('should get device token', function (done) {
-		driver
-			.waitForElementByAndroidUIAutomator('new UiSelector().text("DO IT")',
-				webdriver.asserters.isDisplayed
-			)
-			.click()
-			.waitForElementByAndroidUIAutomator('new UiSelector().text("Alert")',
-				webdriver.asserters.isDisplayed,
-				10000, // the response from 360 seems to take a while, hence the 10 second wait
-				3 // and try 3 times
-			)
-			.elementById('android:id/message')
-			.text(function (err, text) {
-				const GARBAGE = 'Subscribed with token: '.length;
-				deviceToken = text.slice(GARBAGE);
-
-				// close the alert dialog before calling the done callback
-				driver
-					.elementByAndroidUIAutomator('new UiSelector().text("OK")')
-					.click()
-					.then(function () {
-						done();
-					});
-			});
+	it('should get device token', function () {
+		return driver.sleep(5000);
+		// driver
+		// 	.waitForElementByAndroidUIAutomator('new UiSelector().text("DO IT")',
+		// 		webdriver.asserters.isDisplayed
+		// 	)
+		// 	.click()
+		// 	.waitForElementByAndroidUIAutomator('new UiSelector().text("Alert")',
+		// 		webdriver.asserters.isDisplayed,
+		// 		10000, // the response from 360 seems to take a while, hence the 10 second wait
+		// 		3 // and try 3 times
+		// 	)
+		// 	.elementById('android:id/message')
+		// 	.text(function (err, text) {
+		// 		const GARBAGE = 'Subscribed with token: '.length;
+		// 		deviceToken = text.slice(GARBAGE);
+		//
+		// 		// close the alert dialog before calling the done callback
+		// 		driver
+		// 			.elementByAndroidUIAutomator('new UiSelector().text("OK")')
+		// 			.click()
+		// 			.then(function () {
+		// 				done();
+		// 			});
+		// 	});
 	});
 
-	it('should send push notification via REST request', function () {
+	it.skip('should send push notification via REST request', function () {
 		return driver.sendNotificationTo(deviceToken);
 	});
 
-	it('should receive push notification in the foreground', function () {
+	it.skip('should receive push notification in the foreground', function () {
 		const EXP = 'BLEH, Sample alert';
 
 		return driver
@@ -143,7 +143,7 @@ describe('Android push', function () {
 			.click(); // dismiss the alert dialog
 	});
 
-	it('should get push notification in the background; checking tray notification', function () {
+	it.skip('should get push notification in the background; checking tray notification', function () {
 		return driver
 			/*
 				NOTE:
@@ -160,7 +160,7 @@ describe('Android push', function () {
 			);
 	});
 
-	it('press on tray notification and should bring app to foreground', function () {
+	it.skip('press on tray notification and should bring app to foreground', function () {
 		const EXP = 'BLEH, Sample alert';
 
 		return driver
