@@ -147,20 +147,22 @@ describe('iOS push', function () {
 	});
 
 	it('should get push notification in the background; checking tray notification', function () {
+		const dragTrayNotification = new webdriver.TouchAction()
+			.press({x:204, y:0}) // press the top of the screen; notification bar
+			.moveTo({x:0, y:300}) // move down
+			.release(); // release the notification bar
+
 		return driver
 			/*
 				NOTE:
 				- deviceKeyEvent() seems to be only implemented for android
-				- closeApp() seems to background the app in this case
+				- closeApp() seems to background the app in this case, but makes the proxy not active
 				- backgroundApp() behaves like for android: app will be backgrounded, then relaunched after n seconds
 			*/
-			.closeApp();
-			// .sendNotificationTo(deviceToken)
-			// .openNotifications()
-			// .waitForElementByAndroidUIAutomator('new UiSelector().text("BLEH")',
-			// 	webdriver.asserters.isDisplayed,
-			// 	10000 // 10 seconds timeout
-			// );
+			.sendNotificationTo(deviceToken)
+			.backgroundApp(10)
+			.performTouchAction(dragTrayNotification)
+			.waitForElementByName('MONKEYPUSH, now, Sample alert'); // this is a XCUIElementTypeCell
 	});
 
 	it.skip('press on tray notification and should bring app to foreground', function () {
