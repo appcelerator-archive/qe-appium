@@ -81,8 +81,8 @@ before('suite setup', function () {
 		automationName: 'XCUITest',
 	    platformName: 'iOS',
 	    deviceName: 'Pippin',
-	    platformVersion: '10.0.1',
-	    udid: '5fc531f1a32a6f1813af7abfcd68fe14b0515b2b',
+	    platformVersion: '9.3.4',
+	    udid: 'f8052c8714f0b9585a8f89274f447bbd4eda1601',
 		app: '/Users/wluu/github/qe-appium/monkeypush/build/iphone/build/Products/Debug-iphoneos/monkeypush.ipa'
 	});
 });
@@ -103,11 +103,11 @@ describe('iOS push', function () {
 			.waitForElementByName('DO IT')
 			.click()
 			.waitForElementByClassName('XCUIElementTypeAlert') // alert dialogs
-			.hasElementByName('Allow') // the permission dialog appears on first install of the app; will need to check for it
+			.hasElementByName('OK') // the permission dialog appears on first install of the app; will need to check for it
 			.then(function (isFirstInstall) {
 				if (isFirstInstall) {
 					return driver
-						.elementByName('Allow') // if it's the first install, the permission dialog will appear; press the allow button
+						.elementByName('OK') // if it's the first install, the permission dialog will appear; press the allow button
 						.click()
 						.waitForElementByClassName('XCUIElementTypeAlert'); // and wait for the second alert dialog appear; the subscribed token
 				}
@@ -162,20 +162,17 @@ describe('iOS push', function () {
 			.sendNotificationTo(deviceToken)
 			.backgroundApp(10)
 			.performTouchAction(dragTrayNotification)
-			.waitForElementByName('MONKEYPUSH, now, Sample alert'); // this is a XCUIElementTypeCell
+			.waitForElementByName('monkeypush, now, Sample alert'); // this is a XCUIElementTypeCell
 	});
 
-	it.skip('press on tray notification and should bring app to foreground', function () {
+	it('press on tray notification and should bring app to foreground', function () {
 		const EXP = 'BLEH, Sample alert';
 
 		return driver
-			.elementByAndroidUIAutomator('new UiSelector().text("BLEH")')
+			.elementByName('monkeypush, now, Sample alert')
 			.click()
-			.waitForElementByAndroidUIAutomator('new UiSelector().text("Alert")', // the alert dialog should appear when app is brought to the foreground
-				webdriver.asserters.isDisplayed,
-				5000 // 5 seconds timeout
-			)
-			.elementById('android:id/message')
+			.waitForElementByClassName('XCUIElementTypeAlert')
+			.elementByXPath('//*/XCUIElementTypeStaticText[2]')
 			.text().should.become(EXP);
 	});
 });
