@@ -34,7 +34,7 @@ before('suite setup', function () {
 			to_tokens: deviceToken
 		});
 
-		const xmlContent = fs.readFileSync(path.join(__dirname, '../monkeyjunk/tiapp.xml'), {encoding: 'utf8'});
+		const xmlContent = fs.readFileSync(path.join(__dirname, '../monkeypush/tiapp.xml'), {encoding: 'utf8'});
 
 		// find the acs-base-url-development property in the tiapp.xml
 		let host = xmlContent.match(/<property .+acs-base-url-development.+>.+<\/property>/g)[0];
@@ -128,39 +128,39 @@ describe('iOS push', function () {
 			});
 	});
 
-	it.skip('should send push notification via REST request', function () {
+	it('should send push notification via REST request', function () {
 		return driver.sendNotificationTo(deviceToken);
 	});
 
-	it.skip('should receive push notification in the foreground', function () {
+	it('should receive push notification in the foreground', function () {
 		const EXP = 'BLEH, Sample alert';
 
 		return driver
-			.waitForElementByAndroidUIAutomator('new UiSelector().text("Alert")',
+			.waitForElementByClassName('XCUIElementTypeAlert', // after sending the push notification, it could take some time to receive it
 				webdriver.asserters.isDisplayed,
 				10000 // 10 seconds timeout
 			)
-			.elementById('android:id/message')
+			.elementByXPath('//*/XCUIElementTypeStaticText[2]') // need to grab that text that is under the Alert text
 			.text().should.become(EXP)
-			.elementByAndroidUIAutomator('new UiSelector().text("OK")')
+			.elementByName('OK')
 			.click(); // dismiss the alert dialog
 	});
 
-	it.skip('should get push notification in the background; checking tray notification', function () {
+	it('should get push notification in the background; checking tray notification', function () {
 		return driver
 			/*
 				NOTE:
-				pressing the home button should background the app
-				closeApp() kills the app
-				backgroundApp() backgrounds the app, but will wait the specified seconds before bringing the app the foreground and continuing
+				- deviceKeyEvent() seems to be only implemented for android
+				- closeApp() seems to background the app in this case
+				- backgroundApp() behaves like for android: app will be backgrounded, then relaunched after n seconds
 			*/
-			.deviceKeyEvent(3) // https://developer.android.com/reference/android/view/KeyEvent.html#KEYCODE_HOME
-			.sendNotificationTo(deviceToken)
-			.openNotifications()
-			.waitForElementByAndroidUIAutomator('new UiSelector().text("BLEH")',
-				webdriver.asserters.isDisplayed,
-				10000 // 10 seconds timeout
-			);
+			.closeApp();
+			// .sendNotificationTo(deviceToken)
+			// .openNotifications()
+			// .waitForElementByAndroidUIAutomator('new UiSelector().text("BLEH")',
+			// 	webdriver.asserters.isDisplayed,
+			// 	10000 // 10 seconds timeout
+			// );
 	});
 
 	it.skip('press on tray notification and should bring app to foreground', function () {

@@ -147,9 +147,9 @@ describe('Android push', function () {
 		return driver
 			/*
 				NOTE:
-				pressing the home button should background the app
-				closeApp() kills the app
-				backgroundApp() backgrounds the app, but will wait the specified seconds before bringing the app the foreground and continuing
+				- pressing the home button should background the app
+				- closeApp() kills the app
+				- backgroundApp() backgrounds the app, but will wait the specified seconds before bringing the app the foreground and continuing
 			*/
 			.deviceKeyEvent(3) // https://developer.android.com/reference/android/view/KeyEvent.html#KEYCODE_HOME
 			.sendNotificationTo(deviceToken)
