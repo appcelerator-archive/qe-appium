@@ -2,11 +2,11 @@
   "name": "qe-appium",
   "version": "1.0.0",
   "description": "Appium Research",
-  "main": "index.js",
   "scripts": {
-    "test": "mocha test/ks_*_test.js",
-	"test-android-device": "mocha test/android_push_test.js",
-	"test-ios-device": "mocha test/ios_push_test.js"
+    "test-ios": "mocha test/ks_ios_test.js",
+	"test-ios-device": "mocha test/ios_push_test.js",
+	"test-android": "mocha test/ks_android_test.js",
+	"test-android-device": "mocha test/android_push_test.js"
   },
   "repository": {
     "type": "git",
@@ -17,7 +17,7 @@
   "bugs": {
     "url": "https://github.com/appcelerator/qe-appium/issues"
   },
-  "homepage": "https://github.com/appcelerator/qe-appium#readme",
+  "homepage": "https://github.com/appcelerator/qe-appium#README",
   "devDependencies": {
     "chai": "^3.5.0",
     "chai-as-promised": "^6.0.0",
