@@ -67,7 +67,9 @@ The next sections will describe how to setup and run the Appium tests for the ta
 1. For the KitchenSink test app, you will need to generate a new `tiapp.xml` with `appc new` and replace the test app's [tiapp.xml](./KitchenSink/tiapp.xml).
 
 2. To run against iOS:
+
   a. Only build (don't run) the KitchenSink app for iOS e.g: `appc run -p ios --build-only`
+
   b. In `test/ks_ios_test.js` on lines [30-32](./test/ks_ios_test.js#L30-L32), specify the simulator, iOS version, and the `.app` generated from the previous step e.g:
   ```
   ...
@@ -77,11 +79,15 @@ The next sections will describe how to setup and run the Appium tests for the ta
   ...
   ```
   c. Start Appium by running `appium`
+
   d. Open another terminal window and in this repo, run `npm run test-ios`. This will launch the specified iOS simulator, install the KitchenSink and Webdriver apps to the simulator, and start running the mocha tests.
 
 3. To run only against Android (Genymotion emulator only):
+
   a. Launch a Genymotion emulator
+
   b. Only build (don't run) the KitchenSink app for Android e.g: `appc run -p android --build-only`
+
   c. In `test/ks_android_test.js` on lines [30-34](./test/ks_ios_test.js#L30-L34), specify the Android version running in the Genymotion emulator, emulator device (from `adb devices`), the `.apk` generated from the previous step, the app package (app id), and the app activity e.g:
   ```
   ...
@@ -93,6 +99,7 @@ The next sections will describe how to setup and run the Appium tests for the ta
   ...
   ```
   c. Start Appium by running `appium`
+  
   d. Open another terminal window and in this repo, run `npm run test-android`. This will install the KitchenSink and Webdriver apps to the emulator and start running the mocha tests.
 
 ## monkeypush (iOS push on device)
