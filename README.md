@@ -88,7 +88,7 @@ The next sections will describe how to setup and run the Appium tests for the ta
 
   b. Only build (don't run) the KitchenSink app for Android e.g: `appc run -p android --build-only`
 
-  c. In `test/ks_android_test.js` on lines [30-34](./test/ks_ios_test.js#L30-L34), specify the Android version running in the Genymotion emulator, emulator device (from `adb devices`), the `.apk` generated from the previous step, the app package (app id), and the app activity e.g:
+  c. In `test/ks_android_test.js` on lines [30-34](./test/ks_android_test.js#L30-L34), specify the Android version running in the Genymotion emulator, emulator device (from `adb devices`), the `.apk` generated from the previous step, the app package (app id), and the app activity e.g:
   ```
   ...
   platformVersion: '6.0',
@@ -99,7 +99,7 @@ The next sections will describe how to setup and run the Appium tests for the ta
   ...
   ```
   c. Start Appium by running `appium`
-  
+
   d. Open another terminal window and in this repo, run `npm run test-android`. This will install the KitchenSink and Webdriver apps to the emulator and start running the mocha tests.
 
 ## monkeypush (iOS push on device)
