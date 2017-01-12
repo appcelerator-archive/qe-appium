@@ -6,21 +6,21 @@ For the raw notes, you can go here: https://wiki.appcelerator.org/display/qe/App
 
 # Introduction to Appium
 
-This link provides a quick overview of Appium and its core architectural concepts: https://github.com/appium/appium/blob/master/docs/en/about-appium/intro.md
+This link provides a quick overview of Appium and its core architectural concepts: https://github.com/appium/appium/blob/master/docs/en/about-appium/intro.md.
 
 # Setup
 
-You can follow this installation guide to setup Appium on your machine: https://github.com/appium/appium/blob/master/README.md
+You can follow this installation guide to setup Appium on your machine: https://github.com/appium/appium/blob/master/README.md.
 
 Or, you can follow the below steps, which I used for this repo. The steps will be similar to the ones from the above link, but I will provide some extra notes/caveats:
 
-1. You will need node version >= 4 AND npm version >= 3. If you installed node 4.X from nodejs.org, the node installation comes with npm version 2.X. To install npm version >= 3, use npm e.g: `[sudo] npm install -g npm@3.10.10`
+1. You will need node version >= 4 AND npm version >= 3. If you installed node 4.X from nodejs.org, the node installation comes with npm version 2.X. To install npm version >= 3, use npm e.g: `[sudo] npm install -g npm@3.10.10`.
 
-2. Install Appium: `[sudo] npm install -g appium`
+2. Install Appium: `[sudo] npm install -g appium`.
 
- **Note:** Appium's installation guide doesn't recommend (which is kind of weird) you to install its module with `sudo`. Because if you do, you will encounter these type of issues: https://github.com/appium/appium/issues/7057. To fix/workaround this issue, simply run chown on the Appium's node_modules directory: `sudo chown -R <user> /usr/local/lib/node_modules/appium/node_modules`
+ **Note:** Appium's installation guide doesn't recommend (which is kind of weird) you to install its module with `sudo`. Because if you do, you will encounter these type of issues: https://github.com/appium/appium/issues/7057. To fix/workaround this issue, simply run chown on the Appium's node_modules directory: `sudo chown -R <user> /usr/local/lib/node_modules/appium/node_modules`.
 
-3. This is an optional step, but you should install appium-doctor: `[sudo] npm install -g appium-doctor`. This module will check if your machine is setup properly for Appium and recommend any fixes:
+3. This is an optional step, but you should install `appium-doctor`: `[sudo] npm install -g appium-doctor`. This module will check if your machine is setup properly for Appium and recommend any fixes:
 
  ```
  $ appium-doctor
@@ -52,11 +52,57 @@ Or, you can follow the below steps, which I used for this repo. The steps will b
  info AppiumDoctor
  ```
 
-4. In this repo, run `npm install`; this will install dependencies used by the mocha tests
+4. In this repo, run `npm install`; this will install dependencies used by the mocha tests.
 
 # Configuring Appium for iOS Devices
 
-At the time of this writing, Appium will not work with iOS devices straight out-of-the-box. You will need to configure Appium some more to work with iOS devices (no configuring needed for Android devices). The source of steps are based on appium-xcuitest-driver README: https://github.com/appium/appium-xcuitest-driver
+At the time of this writing, Appium will not work with iOS devices straight out-of-the-box. You will need to configure Appium some more to work with iOS devices (no configuring needed for Android devices). To configure it for iOS devices, you can follow these steps from appium-xcuitest-driver's README: https://github.com/appium/appium-xcuitest-driver#manual-configuration-alternative.
+
+Or, you can follow the below steps. It's similar to appium-xcuitest-driver's README, but I've added some extra notes:
+
+1. Install `ios-deploy`: `[sudo] npm install -g ios-deploy --unsafe-perm=true`.
+
+  **Note:** The reason why you need the `--unsafe-perm` flag is because you will encounter this issue: http://stackoverflow.com/questions/34195673/ios-deploy-fail-to-install-on-mac-os-x-el-capitan-10-11.
+
+2. Install `deviceconsole`: `[sudo] npm install -g deviceconsole`.
+
+3. Here is the tricky/frustrating part.
+
+4. cd to the directory where you installed `appium`. For example, if you did a global (e.g. `[sudo] npm install -g`) install, go to `/usr/local/lib/node_modules/appium`.
+
+5. From there, cd into `node_modules/appium-xcuitest-driver/WebDriverAgent` and open `WebDriverAgent.xcodeproj` in Xcode.
+
+6. Warnings may appear, about project settings, when you open the Xcode project; allow Xcode to automatically fix the issues.
+
+  **Note:** I didn't record the exact warnings, but Xcode was able to resolve them.
+
+7. Next, select the **Build Settings** for the **WebDriverAgent** project. Make sure of the following:
+
+  a. The **Code Signing Identity** is correctly set for **Debug**:
+
+  ![Code Signing Identity](./assets/webdriver_code_signing.png "Code Signing Identity")
+
+  **Note:** I don't think it's necessary to set the identity for **Release**.
+
+  b. The **Provisioning Profile** is correctly set for **Debug**:
+
+  ![Provisioning Profile](./assets/webdriver_prov_profile.png "Provisioning Profile")
+
+8. Next, select the **Build Settings** for the **WebDriverAgentRunner** target. Make sure of the following:
+
+  a. The **Code Signing Identity** is correctly set for **Debug**:
+
+  ![Code Signing Identity](./assets/webdriveragentrunner_code_signing.png "Code Signing Identity")
+
+  **Note:** I don't think it's necessary to set the identity for **Release**.
+
+  b. The **Provisioning Profile** is correctly set for **Debug**:
+
+  ![Provisioning Profile](./assets/webdriveragentrunner_prov_profile.png "Provisioning Profile")
+
+9. Finally, select the **Build Settings** for the **WebDriverAgentLib** target. Make sure the **Code Signing Identity** is correctly set for **Debug** (no need to set the Provisioning Profile):
+
+  ![Code Signing Identity](./assets/webdriveragentlib_code_signing.png "Code Signing Identity")
 
 # Sample Apps and Tests
 
@@ -68,7 +114,7 @@ The next sections will describe how to setup and run the Appium tests for the ta
 
 2. To run against iOS:
 
-  a. Only build (don't run) the KitchenSink app for iOS e.g: `appc run -p ios --build-only`
+  a. Only build (don't run) the KitchenSink app for iOS e.g: `appc run -p ios --build-only`.
 
   b. In `test/ks_ios_test.js` on lines [30-32](./test/ks_ios_test.js#L30-L32), specify the simulator, iOS version, and the `.app` generated from the previous step e.g:
   ```
@@ -78,15 +124,15 @@ The next sections will describe how to setup and run the Appium tests for the ta
   app: '/Users/wluu/github/qe-appium/KitchenSink/build/iphone/build/Products/Debug-iphonesimulator/KitchenSink.app',
   ...
   ```
-  c. Start Appium by running `appium`
+  c. Start Appium by running `appium`.
 
   d. Open another terminal window and in this repo, run `npm run test-ios`. This will launch the specified iOS simulator, install the KitchenSink and Webdriver apps to the simulator, and start running the mocha tests.
 
 3. To run only against Android (Genymotion emulator only):
 
-  a. Launch a Genymotion emulator
+  a. Launch a Genymotion emulator.
 
-  b. Only build (don't run) the KitchenSink app for Android e.g: `appc run -p android --build-only`
+  b. Only build (don't run) the KitchenSink app for Android e.g: `appc run -p android --build-only`.
 
   c. In `test/ks_android_test.js` on lines [30-34](./test/ks_android_test.js#L30-L34), specify the Android version running in the Genymotion emulator, emulator device (from `adb devices`), the `.apk` generated from the previous step, the app package (app id), and the app activity e.g:
   ```
@@ -98,7 +144,7 @@ The next sections will describe how to setup and run the Appium tests for the ta
   appActivity: '.KitchensinkActivity',
   ...
   ```
-  c. Start Appium by running `appium`
+  c. Start Appium by running `appium`.
 
   d. Open another terminal window and in this repo, run `npm run test-android`. This will install the KitchenSink and Webdriver apps to the emulator and start running the mocha tests.
 
@@ -107,12 +153,12 @@ The next sections will describe how to setup and run the Appium tests for the ta
 1. For the monkeypush test app, you will need to generate a new `tiapp.xml` with `appc new` and replace the test app's [tiapp.xml](./monkeypush/tiapp.xml).
 
   **Notes:**
-  - Make sure to include the ti.cloud module in the tiapp.xml.
+  - Make sure to include the `ti.cloud` module in the `tiapp.xml`.
   - The app assumes that you are properly setup for push notification (i.e. correct certs, registered on 360 dashboard).
 
-2. Only build (don't run) the monkeypush app for iOS device e.g: `appc run -p ios -T device --build-only`
+2. Only build (don't run) the monkeypush app for iOS device e.g: `appc run -p ios -T device --build-only`.
 
-3. Connect your iOS device to your machine
+3. Connect your iOS device to your machine.
 
 4. In `test/ios_push_test.js` on lines [83-86](./test/ios_push_test.js#L83-L86), specify the device name, iOS version, device udid, and the `.ipa` generated from the previous step e.g:
 ```
@@ -123,7 +169,7 @@ udid: 'f8052c8714f0b9585a8f89274f447bbd4eda1601',
 app: '/Users/wluu/github/qe-appium/monkeypush/build/iphone/build/Products/Debug-iphoneos/monkeypush.ipa'
 ...
 ```
-5. Start Appium by running `appium`
+5. Start Appium by running `appium`.
 6. Open another terminal window and in this repo, run `npm run test-ios-device`. This will install the monkeypush and Webdriver apps to the connected device and start running the mocha tests.
 
 ## monkeyjunk (Android push on device)
@@ -131,12 +177,12 @@ app: '/Users/wluu/github/qe-appium/monkeypush/build/iphone/build/Products/Debug-
 1. For the monkeyjunk test app, you will need to generate a new `tiapp.xml` with `appc new` and replace the test app's [tiapp.xml](./monkeyjunk/tiapp.xml).
 
   **Notes:**
-  - Make sure to include the ti.cloud and ti.cloudpush module in the tiapp.xml.
+  - Make sure to include the `ti.cloud` and `ti.cloudpush` module in the `tiapp.xml`.
   - The app assumes that you are properly setup for push notification (i.e. sender id, server key, registered on 360 dashboard).
 
-2. Only build (don't run) the monkeyjunk app for Android device e.g: `appc run -p android -T device --build-only`
+2. Only build (don't run) the monkeyjunk app for Android device e.g: `appc run -p android -T device --build-only`.
 
-3. Connect your Android device to your machine
+3. Connect your Android device to your machine.
 
 4. In `test/android_push_test.js` on lines [83-87](./test/android_push_test.js#L83-L87), specify the device name (from `adb devices`), Android version on device, `.apk` generated from the previous step, app package (app id), and app activity e.g:
 ```
@@ -148,7 +194,7 @@ appPackage: 'com.appc.junk',
 appActivity: '.MonkeyjunkActivity'
 ...
 ```
-5. Start Appium by running `appium`
+5. Start Appium by running `appium`.
 6. Open another terminal window and in this repo, run `npm run test-android-device`. This will install the monkeyjunk and Webdriver apps to the connected device and start running the mocha tests.
 
 # Other Resources
