@@ -199,3 +199,18 @@ appActivity: '.MonkeyjunkActivity'
 
 # Other Resources
 
+Notes | URL
+--- | ---
+List of Appium clients | https://github.com/appium/appium/blob/master/docs/en/about-appium/appium-clients.md
+Node.js Appium client | https://github.com/admc/wd
+Lots of useful Appium documents | https://github.com/appium/appium/tree/master/docs/en
+Overview on how to write Appium tests | https://github.com/appium/appium/blob/master/docs/en/writing-running-appium/running-tests.md
+Other useful documents when writing Appium tests | https://github.com/appium/appium/tree/master/docs/en/writing-running-appium
+Appium examples in Node.js | https://github.com/appium/sample-code/tree/master/sample-code/examples/node
+Node.js Appium client APIs  | https://github.com/admc/wd/blob/master/doc/api.md
+Promise chaining in Appium (which this repo is using) | https://github.com/admc/wd#element-function-chaining-using-promise-chains
+`chai-as-promised` module is used in the by Node.js Appium client | https://www.npmjs.com/package/chai-as-promised
+And here is the chai APIs | http://chaijs.com/api/bdd/
+APIs that aren't available out-of-the-box for Node.js Appium client | http://appium.io/slate/en/v1.6.0/?javascript#swipe<br>http://appium.io/slate/en/v1.6.0/?javascript#pinch<br>http://appium.io/slate/en/v1.6.0/?javascript#zoom<br>http://appium.io/slate/en/v1.6.0/?javascript#scroll-to
+Issues with using XCUITest with Appium | https://github.com/appium/appium/blob/master/docs/en/advanced-concepts/migrating-to-xcuitest.md
+Appium GUI; useful for determining what Appium can detect on the UI; recording doesn't really work  | http://appium.io/slate/en/v1.6.0/?javascript#appium-gui
