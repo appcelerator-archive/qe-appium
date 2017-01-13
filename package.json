@@ -4,9 +4,9 @@
   "description": "Appium Research",
   "scripts": {
     "test-ios": "mocha test/ks_ios_test.js",
-	"test-ios-device": "mocha test/ios_push_test.js",
-	"test-android": "mocha test/ks_android_test.js",
-	"test-android-device": "mocha test/android_push_test.js"
+    "test-ios-device": "mocha test/ios_push_test.js",
+    "test-android": "mocha test/ks_android_test.js",
+    "test-android-device": "mocha test/android_push_test.js"
   },
   "repository": {
     "type": "git",
