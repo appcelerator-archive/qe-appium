@@ -213,4 +213,4 @@ Promise chaining in Appium (which this repo is using) | https://github.com/admc/
 And here is the chai APIs | http://chaijs.com/api/bdd/
 APIs that aren't available out-of-the-box for Node.js Appium client | http://appium.io/slate/en/master/#swipe<br>http://appium.io/slate/en/master/#pinch<br>http://appium.io/slate/en/master/#zoom<br>http://appium.io/slate/en/master/#scroll-to
 Issues with using XCUITest with Appium | https://github.com/appium/appium/blob/master/docs/en/advanced-concepts/migrating-to-xcuitest.md
-Appium GUI; useful for determining what Appium can detect on the UI; recording doesn't really work  | http://appium.io/slate/en/v1.6.0/?javascript#appium-gui
+Appium GUI; useful for determining what Appium can detect on the UI; recording doesn't really work  | http://appium.io/slate/en/master/?javascript#an-os-x-gui-for-appium
