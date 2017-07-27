@@ -34,7 +34,9 @@ before('suite setup', function () {
 	});
 });
 
-after('suite teardown', function () {
+after('suite teardown', function (done) {
+	// Invoking done() prevents exit status 1.
+	done();
 	return driver.quit();
 });
 
